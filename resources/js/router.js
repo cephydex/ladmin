@@ -5,6 +5,7 @@ Vue.use(Router);
 
 import Profile from "./components/Profile.vue";
 import Dashboard from "./components/Dashboard.vue";
+import Users from "./components/Users.vue";
 
 let routes = [
     {
@@ -16,6 +17,11 @@ let routes = [
         path: '/profile',
         component: Profile,
         name: 'profile',
+    },
+    {
+        path: '/users',
+        component: Users,
+        name: 'users',
     },
 ]
 
