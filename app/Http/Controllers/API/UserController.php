@@ -47,7 +47,7 @@ class UserController extends Controller
             'type' => $request->get('type'),
             'bio' => $request->get('bio'),
         ]);
-        
+
         $data = [
             'msg' => 'User created succesfully',
             'data' => $result,
@@ -76,7 +76,14 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::findOrFail($id);
+        $this->validate($request, [
+            'name' => 'required|string|max:191',
+            'email' => 'required|string|email|max: 255|unique:users,email,'. $user->id,
+            'password' => 'sometimes|string|min: 6',
+        ]);
+        $user->update($request->all());
+        return ['msg' => 'user updated'];
     }
 
     /**
@@ -87,6 +94,7 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::findOrFail($id)->delete();
+        return ['msg' => 'User deleted', 'deleted' => $user];
     }
 }

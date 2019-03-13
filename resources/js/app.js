@@ -18,7 +18,7 @@ import VueProgressBar from "vue-progressbar";
 // import swal from 'sweetalert2';
 import Swal from 'sweetalert2'
 
-window.form = Form;
+window.Form = Form;
 window.Swal = Swal;
 Vue.component(HasError.name, HasError);
 Vue.component(AlertError.name, AlertError);

@@ -9,7 +9,8 @@
                     <h3 class="card-title">User List</h3>
 
                     <div class="card-tools">
-                        <button type="submit" class="btn btn-success" data-toggle="modal" data-target="#mdlAddNew">Add New
+                        <!-- <button type="submit" class="btn btn-success" data-toggle="modal" data-target="#mdlAddNew">Add New -->
+                        <button type="submit" class="btn btn-success" @click="newModal">Add New
                             <i class="fas fa-user-plus fa-fw"></i>
                         </button>
                     </div>
@@ -33,11 +34,10 @@
                                 <td>{{ user.type | upText }}</td>
                                 <td>{{ user.created_at | dmyDate }}</td>
                                 <td>
-                                    <a href="#">
-                                        <!-- Edit -->
+                                    <a href="#" @click="editModal(user)">
                                         <i class="fas fa-edit"></i>
-                                    </a>
-                                    <a href="#">
+                                    </a>|
+                                    <a href="#" @click="deleteUser(user.id)">
                                         <i class="fas fa-trash red"></i>
                                     </a>
                                 </td>
@@ -57,12 +57,13 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Add New User</h5>
+                <h5 class="modal-title" id="exampleModalLabel" v-show="!editMode">Add New User</h5>
+                <h5 class="modal-title" id="exampleModalLabel" v-show="editMode">Edit User Info</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form @submit.prevent="createUser">
+            <form @submit.prevent="editMode ? updateUser() : createUser()">
             <div class="modal-body">
                     <div class="form-group">
                         <!-- <label for="name">Name</label> -->
@@ -99,8 +100,8 @@
                     <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>&nbsp;
-                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>&nbsp;
+                <button type="submit" class="btn btn-primary">{{ btnTitle }}</button>
             </div>
             </form>
             </div>
@@ -114,8 +115,11 @@
     export default {
         data() {
             return {
+                editMode: true,
+                btnTitle: 'Save',
                 users: {},
-                form: new form({
+                form: new Form({
+                    id: '',
                     name: '',
                     email: '',
                     password: '',
@@ -134,25 +138,82 @@
         },
         methods: {
             createUser() {
-                console.log('data posted');
                 this.$Progress.start();
                 this.form.post('api/user').then((rs) => {
-                    console.log('post result', rs);
+                    // console.log('post result', rs);
                     this.$Progress.finish();
                     $('#mdlAddNew').modal('hide');
+                    Fire.$emit('afterCreated');
                     toast.fire({
                         'type': 'success',
                         'title': 'User created succesfully!',
                     })
                 });
-                Fire.$emit('afterCreated');
             },
+
+            updateUser() {
+                this.$Progress.start();
+                console.log('user update', this.form.id);
+                this.form.put(`api/user/${this.form.id}`).then((rs) => {
+                    this.$Progress.finish();
+                    $('#mdlAddNew').modal('hide');
+                    Fire.$emit('afterCreated');
+                    toast.fire({
+                        'type': 'success',
+                        'title': 'User updated succesfully!',
+                    })
+                }, (err) => {
+                    this.$Progress.fail();
+                })
+            },
+
             loadUsers() {
                 // axios.get('api/user').then((rs) => {
                 axios.get('api/user').then(({data}) => {
                     console.log('result', data);
                     this.users = data.data;
                 });                
+            },
+
+            deleteUser(id) {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete!'
+                }).then((result) => {
+                        if (result.value) {
+                            this.form.delete(`api/user/${id}`)
+                                .then((rs) => {
+                                    console.log('Success', rs);
+                                    Swal.fire('Deleted!', 'Your file has been deleted.', 'success')
+                                    Fire.$emit('afterCreated');
+
+                                }, (err) => {
+                                    // console.log('Error', err);
+                                    Swal.fire('Failed!', 'User could not be deleeted.', 'warning')
+                                });
+                        }
+                })
+            },
+
+            newModal() {
+                this.editMode = false;
+                this.btnTitle = 'Save';
+                this.form.reset();
+                $('#mdlAddNew').modal('show');
+            },
+
+            editModal(user) {
+                this.editMode = true;
+                this.btnTitle = 'Update';
+                console.log('user', user);
+                this.form.reset();
+                this.form.fill(user);
+                $('#mdlAddNew').modal('show');
             }
         },
         mounted() {
