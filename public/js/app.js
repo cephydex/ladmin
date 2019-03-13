@@ -1965,18 +1965,23 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   created: function created() {
+    var _this = this;
+
     this.loadUsers();
+    Fire.$on('afterCreated', function () {
+      _this.loadUsers();
+    }); // setInterval( () => this.loadUsers(), 3000);
   },
   methods: {
     createUser: function createUser() {
-      var _this = this;
+      var _this2 = this;
 
       console.log('data posted');
       this.$Progress.start();
       this.form.post('api/user').then(function (rs) {
         console.log('post result', rs);
 
-        _this.$Progress.finish();
+        _this2.$Progress.finish();
 
         $('#mdlAddNew').modal('hide');
         toast.fire({
@@ -1984,15 +1989,16 @@ __webpack_require__.r(__webpack_exports__);
           'title': 'User created succesfully!'
         });
       });
+      Fire.$emit('afterCreated');
     },
     loadUsers: function loadUsers() {
-      var _this2 = this;
+      var _this3 = this;
 
       // axios.get('api/user').then((rs) => {
       axios.get('api/user').then(function (_ref) {
         var data = _ref.data;
         console.log('result', data);
-        _this2.users = data.data;
+        _this3.users = data.data;
       });
     }
   },
@@ -73590,6 +73596,7 @@ var toast = sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.mixin({
   timer: 3000
 });
 window.toast = toast;
+window.Fire = new Vue();
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

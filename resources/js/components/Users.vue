@@ -127,6 +127,10 @@
         },
         created() {
             this.loadUsers();
+            Fire.$on('afterCreated', () => {
+                this.loadUsers();
+            });
+            // setInterval( () => this.loadUsers(), 3000);
         },
         methods: {
             createUser() {
@@ -140,14 +144,15 @@
                         'type': 'success',
                         'title': 'User created succesfully!',
                     })
-                })
+                });
+                Fire.$emit('afterCreated');
             },
             loadUsers() {
                 // axios.get('api/user').then((rs) => {
                 axios.get('api/user').then(({data}) => {
                     console.log('result', data);
                     this.users = data.data;
-                });
+                });                
             }
         },
         mounted() {

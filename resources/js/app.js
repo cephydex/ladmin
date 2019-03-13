@@ -44,6 +44,7 @@ const toast = Swal.mixin({
     timer: 3000
 });
 window.toast = toast;
+window.Fire = new Vue();
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
