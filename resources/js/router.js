@@ -7,6 +7,18 @@ import Profile from "./components/Profile.vue";
 import Dashboard from "./components/Dashboard.vue";
 import Users from "./components/Users.vue";
 
+/**
+ * The following block of code may be used to automatically register your
+ * Vue components. It will recursively scan this directory for the Vue
+ * components and automatically register them with their "basename".
+ *
+ * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
+ */
+
+// const files = require.context('./', true, /\.vue$/i);
+// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
+
+
 let routes = [
     {
         path: '/dashboard',
