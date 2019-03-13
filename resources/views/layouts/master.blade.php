@@ -80,13 +80,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
             <li class="nav-item">
                 <router-link to="/dashboard" class="nav-link">
                     <i class="nav-icon fas fa-tachometer-alt blue"></i>
                     <p>Dashboard
-                        <!-- <span class="right badge badge-danger">New</span> -->
                     </p>
                 </router-link>
             </li>            
@@ -115,7 +112,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </li>
           <li class="nav-item">
                 <router-link to="/users" class="nav-link">
-                    <i class="nav-icon fas fa-users teal"></i>
+                    <i class="nav-icon fas fa-users"></i>
                     <p>Users</p>
                 </router-link>
             </li>
@@ -135,6 +132,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <router-link to="/profile" class="nav-link">
                     <i class="nav-icon fas fa-user orange"></i>
                     <p>Profile</p>
+                </router-link>
+            </li>
+            <li class="nav-item">
+                <router-link to="/developer" class="nav-link">
+                    <i class="nav-icon fas fa-cogs"></i>
+                    <p>Developer</p>
                 </router-link>
             </li>
           
@@ -159,7 +162,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row">
           <router-view></router-view>
-          
+
           <vue-progress-bar></vue-progress-bar>
         </div>
         <!-- /.row -->

@@ -22,8 +22,11 @@ import Users from "./components/Users.vue";
 let routes = [
     {
         path: '/dashboard',
-        component: Dashboard,
-        // component: require('./components/Dashboard.vue'),
+        component: require('./components/Dashboard.vue').default,
+    },
+    {
+        path: '/developer',
+        component: require('./components/Developer.vue').default,
     },
     {
         path: '/profile',
